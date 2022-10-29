@@ -1,0 +1,32 @@
+server:
+  port: 80
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1000/eureka
+spring:
+  application:
+    name: atguigu-crowd-zuul
+  redis:
+    host: 192.168.247.131
+  session:
+    store-type: redis
+zuul:
+  ignored-services: "*"
+  sensitive-headers: "*" #在zuul向其他微服务重定向时保持请求头的消息
+  routes:
+    crowd-portal:
+      service-id: atguigu-crowd-auth
+      path: /** #这里一定要用两颗星，不然“/”后面的多层目录将访问不到
+    crowd-project:
+      service-id: atguigu-crowd-project
+      path: /project/**
+    crowd-order:
+      service-id: atguigu-crowd-order
+      path: /order/**
+    crowd-pay:
+      service-id: atguigu-crowd-pay
+      path: /pay/**
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
